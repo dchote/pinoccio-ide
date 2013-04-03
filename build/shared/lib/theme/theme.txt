@@ -102,3 +102,10 @@ editor.comment2.style = #7e7e7e,plain
 # LINE STATUS - editor line number status bar at the bottom of the screen
 linestatus.font	   = SansSerif,plain,10
 linestatus.height  = 20
+
+
+# SERIAL - CONSOLE
+serial.font = Monospaced,plain,11
+serial.font.macosx = Monaco,plain,10
+serial.bgcolor = #000000
+serial.fgcolor = #eeeeee

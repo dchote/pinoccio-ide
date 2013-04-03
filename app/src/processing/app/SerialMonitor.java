@@ -63,14 +63,19 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
   
     getContentPane().setLayout(new BorderLayout());
     
-    Font consoleFont = Theme.getFont("console.font");
+    Font consoleFont = Theme.getFont("serial.font");
     Font editorFont = Preferences.getFont("editor.font");
     Font font = new Font(consoleFont.getName(), consoleFont.getStyle(), editorFont.getSize());
-
+	
+	Color bgColor = Theme.getColor("serial.bgcolor");
+    Color fgColor = Theme.getColor("serial.fgcolor");
+	
     textArea = new JTextArea(16, 40);
     textArea.setEditable(false);    
     textArea.setFont(font);
-    
+    textArea.setBackground(bgColor);
+	textArea.setForeground(fgColor);
+	
     // don't automatically update the caret.  that way we can manually decide
     // whether or not to do so based on the autoscroll checkbox.
     ((DefaultCaret)textArea.getCaret()).setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
@@ -90,18 +95,9 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
         textField.setText("");
       }});
 
-    sendButton = new JButton(_("Send"));
-    sendButton.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-        send(textField.getText());
-        textField.setText("");
-      }});
-    
     pane.add(textField);
-    pane.add(Box.createRigidArea(new Dimension(4, 0)));
-    pane.add(sendButton);
     
-    getContentPane().add(pane, BorderLayout.NORTH);
+    getContentPane().add(pane, BorderLayout.SOUTH);
     
     pane = new JPanel();
     pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
@@ -156,7 +152,7 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
     pane.add(Box.createRigidArea(new Dimension(8, 0)));
     pane.add(serialRates);
     
-    getContentPane().add(pane, BorderLayout.SOUTH);
+    getContentPane().add(pane, BorderLayout.NORTH);
 
     pack();
     
