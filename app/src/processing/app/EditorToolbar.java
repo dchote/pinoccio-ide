@@ -46,7 +46,6 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 		setFloatable(false);
 
 		addButtons();
-		//addSearchField();
 	}
 
 
