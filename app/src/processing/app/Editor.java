@@ -85,7 +85,7 @@ public class Editor extends JFrame implements RunnerListener {
 
   int numTools = 0;
 
-  EditorToolbar toolbar;
+  ApplicationToolbar toolbar;
   // these menus are shared so that they needn't be rebuilt for all windows
   // each time a sketch is created, renamed, or moved.
   static JMenu toolbarMenu;
@@ -217,7 +217,9 @@ public class Editor extends JFrame implements RunnerListener {
     JPanel pain = new JPanel();
     pain.setLayout(new BorderLayout());
     contentPain.add(pain, BorderLayout.CENTER);
-
+	
+	pain.getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+	
     Box box = Box.createVerticalBox();
     Box upper = Box.createVerticalBox();
 
@@ -225,7 +227,8 @@ public class Editor extends JFrame implements RunnerListener {
       toolbarMenu = new JMenu();
       base.rebuildToolbarMenu(toolbarMenu);
     }
-    toolbar = new EditorToolbar(this, toolbarMenu);
+	
+    toolbar = new ApplicationToolbar();//new EditorToolbar(this, toolbarMenu);
     upper.add(toolbar);
 
     header = new EditorHeader(this);
@@ -284,7 +287,7 @@ public class Editor extends JFrame implements RunnerListener {
     pain.add(box);
 
     // get shift down/up events so we can show the alt version of toolbar buttons
-    textarea.addKeyListener(toolbar);
+    //DAN textarea.addKeyListener(toolbar);
 
     pain.setTransferHandler(new FileDropHandler());
 
@@ -1905,7 +1908,7 @@ public class Editor extends JFrame implements RunnerListener {
   public void handleRun(final boolean verbose) {
     internalCloseRunner();
     running = true;
-    toolbar.activate(EditorToolbar.RUN);
+    //toolbar.activate(EditorToolbar.RUN);
     status.progress(_("Compiling sketch..."));
 
     // do this to advance/clear the terminal window / dos prompt / etc
@@ -1934,7 +1937,7 @@ public class Editor extends JFrame implements RunnerListener {
       }
 
       status.unprogress();
-      toolbar.deactivate(EditorToolbar.RUN);
+      //toolbar.deactivate(EditorToolbar.RUN);
     }
   }
 
@@ -1951,7 +1954,7 @@ public class Editor extends JFrame implements RunnerListener {
       }
 
       status.unprogress();
-      toolbar.deactivate(EditorToolbar.RUN);
+      //toolbar.deactivate(EditorToolbar.RUN);
     }
   }
 
@@ -1991,7 +1994,7 @@ public class Editor extends JFrame implements RunnerListener {
 
     internalCloseRunner();
 
-    toolbar.deactivate(EditorToolbar.RUN);
+    //toolbar.deactivate(EditorToolbar.RUN);
 //    toolbar.deactivate(EditorToolbar.STOP);
 
     // focus the PDE again after quitting presentation mode [toxi 030903]
@@ -2007,7 +2010,7 @@ public class Editor extends JFrame implements RunnerListener {
    */
   public void internalRunnerClosed() {
     running = false;
-    toolbar.deactivate(EditorToolbar.RUN);
+    //toolbar.deactivate(EditorToolbar.RUN);
   }
 
 
@@ -2282,7 +2285,7 @@ public class Editor extends JFrame implements RunnerListener {
 
 
   protected boolean handleSave2() {
-    toolbar.activate(EditorToolbar.SAVE);
+    //toolbar.activate(EditorToolbar.SAVE);
     statusNotice(_("Saving..."));
     boolean saved = false;
     try {
@@ -2308,7 +2311,7 @@ public class Editor extends JFrame implements RunnerListener {
       // this is used when another operation calls a save
     }
     //toolbar.clear();
-    toolbar.deactivate(EditorToolbar.SAVE);
+    //toolbar.deactivate(EditorToolbar.SAVE);
     return saved;
   }
 
@@ -2317,7 +2320,7 @@ public class Editor extends JFrame implements RunnerListener {
     //stopRunner();  // formerly from 0135
     handleStop();
 
-    toolbar.activate(EditorToolbar.SAVE);
+    //toolbar.activate(EditorToolbar.SAVE);
 
     //SwingUtilities.invokeLater(new Runnable() {
     //public void run() {
@@ -2339,7 +2342,7 @@ public class Editor extends JFrame implements RunnerListener {
 
     } finally {
       // make sure the toolbar button deactivates
-      toolbar.deactivate(EditorToolbar.SAVE);
+      //toolbar.deactivate(EditorToolbar.SAVE);
     }
 
     return true;
@@ -2389,7 +2392,7 @@ public class Editor extends JFrame implements RunnerListener {
    */
   synchronized public void handleExport(final boolean usingProgrammer) {
     //if (!handleExportCheckModified()) return;
-    toolbar.activate(EditorToolbar.EXPORT);
+    //toolbar.activate(EditorToolbar.EXPORT);
     console.clear();
     status.progress(_("Uploading to I/O Board..."));
 
@@ -2428,7 +2431,7 @@ public class Editor extends JFrame implements RunnerListener {
       status.unprogress();
       uploading = false;
       //toolbar.clear();
-      toolbar.deactivate(EditorToolbar.EXPORT);
+      //toolbar.deactivate(EditorToolbar.EXPORT);
     }
   }
 
@@ -2464,7 +2467,7 @@ public class Editor extends JFrame implements RunnerListener {
       status.unprogress();
       uploading = false;
       //toolbar.clear();
-      toolbar.deactivate(EditorToolbar.EXPORT);
+      //toolbar.deactivate(EditorToolbar.EXPORT);
     }
   }
 
@@ -2599,7 +2602,7 @@ public class Editor extends JFrame implements RunnerListener {
   public void statusError(String what) {
     status.error(what);
     //new Exception("deactivating RUN").printStackTrace();
-    toolbar.deactivate(EditorToolbar.RUN);
+    //toolbar.deactivate(EditorToolbar.RUN);
   }
 
 
