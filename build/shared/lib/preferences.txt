@@ -243,8 +243,11 @@ run.present.exclusive.macosx = true
 
 # ARDUINO PREFERENCES
 board=pinoccio
+target=arduino
 target_package=pinoccio
 target_platform=avr
+software=PINOCCIO
+
 
 programmer=arduino:arduinoisp
 

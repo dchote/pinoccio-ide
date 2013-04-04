@@ -24,3 +24,4 @@ build/linux/*.tgz
 test-bin
 *.iml
 .idea
+.DS_Store
