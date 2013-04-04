@@ -151,7 +151,7 @@ public class Editor extends JFrame implements RunnerListener {
 
 
   public Editor(Base ibase, String path, int[] location) {
-    super("Arduino");
+    super("Pinoccio");
     this.base = ibase;
 
     Base.setIcon(this);
@@ -2410,6 +2410,8 @@ public class Editor extends JFrame implements RunnerListener {
         boolean success = sketch.exportApplet(false);
         if (success) {
           statusNotice(_("Done uploading."));
+		// TODO DAN wrap in preferences
+			handleSerial();
         } else {
           // error message will already be visible
         }
@@ -2446,6 +2448,8 @@ public class Editor extends JFrame implements RunnerListener {
         boolean success = sketch.exportApplet(true);
         if (success) {
           statusNotice(_("Done uploading."));
+		// TODO DAN wrap in preferences
+			handleSerial();
         } else {
           // error message will already be visible
         }

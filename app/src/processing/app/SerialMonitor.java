@@ -63,6 +63,12 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
   
     getContentPane().setLayout(new BorderLayout());
     
+
+	JPanel pane = new JPanel();
+	getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+	
+	pane.setLayout(new BorderLayout());
+	
     Font consoleFont = Theme.getFont("serial.font");
     Font editorFont = Preferences.getFont("editor.font");
     Font font = new Font(consoleFont.getName(), consoleFont.getStyle(), editorFont.getSize());
@@ -82,11 +88,7 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
     
     scrollPane = new JScrollPane(textArea);
     
-    getContentPane().add(scrollPane, BorderLayout.CENTER);
-    
-    JPanel pane = new JPanel();
-    pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
-    pane.setBorder(new EmptyBorder(4, 4, 4, 4));
+    pane.add(scrollPane, BorderLayout.CENTER);
 
     textField = new JTextField(40);
     textField.addActionListener(new ActionListener() {
@@ -95,10 +97,19 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
         textField.setText("");
       }});
 
-    pane.add(textField);
-    
-    getContentPane().add(pane, BorderLayout.SOUTH);
-    
+	textField.setFont(font);
+    textField.setBackground(bgColor);
+	textField.setForeground(fgColor);
+    pane.add(textField, BorderLayout.SOUTH);
+
+    getContentPane().add(pane, BorderLayout.CENTER);
+
+
+	SerialMonitorLineStatus status = new SerialMonitorLineStatus();
+	getContentPane().add(status, BorderLayout.SOUTH);
+
+
+
     pane = new JPanel();
     pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
     pane.setBorder(new EmptyBorder(4, 4, 4, 4));
@@ -152,7 +163,11 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
     pane.add(Box.createRigidArea(new Dimension(8, 0)));
     pane.add(serialRates);
     
-    getContentPane().add(pane, BorderLayout.NORTH);
+    //TODO DAN move to preferences getContentPane().add(pane, BorderLayout.NORTH);
+
+
+	
+
 
     pack();
     

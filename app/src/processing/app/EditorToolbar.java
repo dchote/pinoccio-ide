@@ -72,7 +72,7 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 		
 		this.add(Box.createHorizontalGlue());
 		
-		buttons[SERIAL] = makeToolbarButton("SERIAL", "Serial", "icons/Magnifying Glass.png", "Serial Terminal");
+		buttons[SERIAL] = makeToolbarButton("SERIAL", "Serial", "icons/Panel.png", "Serial Terminal");
 		this.add(buttons[SERIAL], BorderLayout.EAST);
 	}
 
