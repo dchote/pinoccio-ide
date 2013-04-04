@@ -242,10 +242,11 @@ run.present.exclusive = false
 run.present.exclusive.macosx = true
 
 # ARDUINO PREFERENCES
-board = pinoccio
-target = arduino
+board=pinoccio
+target_package=pinoccio
+target_platform=avr
 
-programmer = arduino:avrispmkii
+programmer=arduino:arduinoisp
 
 upload.using = bootloader
 upload.verify = true
