@@ -7,7 +7,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-public class EditorToolbar extends JToolBar {
+public class EditorToolbar extends JToolBar implements ActionListener {
+	static final int TOOLBAR_HEIGHT  = 40;
+	
 	static final int BUTTON_COUNT = 6;
 	
 	static final int BUTTON_WIDTH  = 27;
@@ -28,10 +30,6 @@ public class EditorToolbar extends JToolBar {
 	static final int SERIAL   = 5;
 
 	Editor editor;
-
-	Image offscreen;
-	int width, height;
-  
 	JPopupMenu popup;
 	JMenu menu;
 	
@@ -53,80 +51,89 @@ public class EditorToolbar extends JToolBar {
 
 
 	private void addButtons() {
-		Dimension size = getSize();
-	    if ((offscreen == null) || (size.width != width) || (size.height != height)) {
-			offscreen = createImage(size.width, size.height);
-			width = size.width;
-			height = size.height;
-		}
-	
-		Image allButtonIcons = Base.getThemeImage("buttons.png", this);
-	    Image buttonImages[][] = new Image[BUTTON_COUNT][3];
-	    
-		for (int i = 0; i < BUTTON_COUNT; i++) {
-			for (int state = 0; state < 3; state++) {
-				Image image = createImage(BUTTON_WIDTH, BUTTON_HEIGHT);
-				Graphics g = image.getGraphics();
-				//g.drawImage(allButtonIcons,  -(i * BUTTON_IMAGE_SIZE) - 3, (-2 + state) * BUTTON_IMAGE_SIZE, null);
-				//buttonImages[i][state] = image;
-			}
-		}
-		
 		buttons = new JButton[BUTTON_COUNT];
 		
-		JButton button = new JButton("Verify");
-		buttons[VERIFY] = button;
+		buttons[VERIFY] = makeToolbarButton("VERIFY", "Verify", "icons/Gear.png", "Verify Sketch");
+		this.add(buttons[VERIFY], BorderLayout.WEST);
+		
+		buttons[UPLOAD] = makeToolbarButton("UPLOAD", "Upload", "icons/Box » This Side Up.png", "Upload Sketch");
+		this.add(buttons[UPLOAD]);
 		
 		
+		this.addSeparator();
 		
-		this.add(buttons[VERIFY]);
+		buttons[NEW] = makeToolbarButton("NEW", "New", "icons/Filetype.png", "New Sketch");
+		this.add(buttons[NEW]);
 		
-		//this.add(buttons[VERIFY]);
+		buttons[OPEN] = makeToolbarButton("OPEN", "Open", "icons/Folder » Blue.png", "Open Existing Sketch");
+		this.add(buttons[OPEN]);
 		
-		//JButton button = null;
-
-		//button = makeToolbarButton("Verify");
-		//add(button, BorderLayout.WEST);
-		//button = makeToolbarButton("Upload");
-		//add(button);
-		//button = makeToolbarButton("Take a Shit");
-		//add(button);
+		buttons[SAVE] = makeToolbarButton("SAVE", "Save", "icons/Disk » Hard Disk.png", "Save Sketch");
+		this.add(buttons[SAVE]);
 		
+		this.add(Box.createHorizontalGlue());
+		
+		buttons[SERIAL] = makeToolbarButton("SERIAL", "Serial", "icons/Magnifying Glass.png", "Serial Terminal");
+		this.add(buttons[SERIAL], BorderLayout.EAST);
 	}
 
-	protected JButton makeToolbarButton(String buttonName) {
+	protected JButton makeToolbarButton(String actionCommand, String buttonText, String imagePath, String toolTipText) {
 	
-	    //Create and initialize the button.
-	    JButton button = new JButton();
-		button.setText(buttonName);
-	    //button.setActionCommand(actionCommand);
-	    button.setToolTipText(buttonName);
-	    //button.addActionListener(this);
+		JButton button = new JButton(new ImageIcon(Base.getThemeImage(imagePath, this)));
+		//button.setVerticalTextPosition(SwingConstants.BOTTOM);
+		//button.setHorizontalTextPosition(SwingConstants.CENTER);
+		//button.setText(buttonText);
+	    button.setToolTipText(toolTipText);
+		button.setActionCommand(actionCommand);
+		button.addActionListener(this);
 
 	    return button;
 	}
 
-	private void addSearchField() {
-		JPanel panel = new JPanel();
-		this.add(panel, BorderLayout.EAST);
-
-		JTextField search = new JTextField();
-		search.putClientProperty("Quaqua.TextField.style","search");
-		search.setPreferredSize(new Dimension(150, 25));
-		search.setMaximumSize(new Dimension(150, 25));
-		panel.add(search);
+	public void actionPerformed(ActionEvent actionEvent) {
+		String actionCommand = actionEvent.getActionCommand();
+		boolean shiftPressed = (actionEvent.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK;
+		
+		if (actionCommand == "VERIFY") {
+			editor.handleRun(false);
+		} else if (actionCommand == "UPLOAD") {
+			editor.handleExport(shiftPressed);
+		} else if (actionCommand == "NEW") {
+			if (shiftPressed) {
+				editor.base.handleNew();
+			} else {
+				editor.base.handleNewReplace();
+			}
+		} else if (actionCommand == "OPEN") {
+			final int x = buttons[OPEN].getX();
+			final int y = buttons[OPEN].getY() + (TOOLBAR_HEIGHT - 4);
+			
+			popup = menu.getPopupMenu();
+		    popup.show(EditorToolbar.this, x, y);
+		} else if (actionCommand == "SAVE") {
+			editor.handleSave(false);
+		} else if (actionCommand == "SERIAL") {
+			editor.handleSerial();			
+		}
 	}
 	
+	public void activate(int buttonIndex) {
+		buttons[buttonIndex].setEnabled(false);
+	}
+	
+	public void deactivate(int buttonIndex) {
+		buttons[buttonIndex].setEnabled(true);
+	}
 	
 	public Dimension getPreferredSize() {
 		return getMinimumSize();
 	}
 
 	public Dimension getMinimumSize() {
-		return new Dimension(300, 36);
+		return new Dimension(400, TOOLBAR_HEIGHT);
 	}
 
 	public Dimension getMaximumSize() {
-		return new Dimension(3000, 36);
+		return new Dimension(3000, TOOLBAR_HEIGHT);
 	}
 }
