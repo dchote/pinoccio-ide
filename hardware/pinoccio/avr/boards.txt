@@ -18,4 +18,4 @@ pinoccio.build.mcu=atmega128rfa1
 pinoccio.build.f_cpu=16000000L
 pinoccio.build.board=PINOCCIO
 pinoccio.build.core=pinoccio
-pinoccio.build.variant=standard
+pinoccio.build.variant=pinoccio

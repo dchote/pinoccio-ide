@@ -53,6 +53,7 @@ public class Platform extends processing.app.Platform {
 
   public void init(Base base) {
     System.setProperty("apple.laf.useScreenMenuBar", "true");
+	System.setProperty("apple.awt.brushMetalLook", "true");
     ThinkDifferent.init(base);
     /*
     try {
