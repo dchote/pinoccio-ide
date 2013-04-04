@@ -85,7 +85,7 @@ public class Editor extends JFrame implements RunnerListener {
 
   int numTools = 0;
 
-  ApplicationToolbar toolbar;
+  EditorToolbar toolbar;
   // these menus are shared so that they needn't be rebuilt for all windows
   // each time a sketch is created, renamed, or moved.
   static JMenu toolbarMenu;
@@ -228,7 +228,7 @@ public class Editor extends JFrame implements RunnerListener {
       base.rebuildToolbarMenu(toolbarMenu);
     }
 	
-    toolbar = new ApplicationToolbar();//new EditorToolbar(this, toolbarMenu);
+    toolbar = new EditorToolbar(this, toolbarMenu);
     upper.add(toolbar);
 
     header = new EditorHeader(this);
