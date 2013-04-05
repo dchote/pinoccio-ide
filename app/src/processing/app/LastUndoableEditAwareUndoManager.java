@@ -7,25 +7,25 @@ import javax.swing.undo.UndoableEdit;
 
 public class LastUndoableEditAwareUndoManager extends UndoManager {
 
-  private UndoableEdit lastUndoableEdit;
+	private UndoableEdit lastUndoableEdit;
 
-  public LastUndoableEditAwareUndoManager() {
-    this.lastUndoableEdit = null;
-  }
+	public LastUndoableEditAwareUndoManager() {
+		this.lastUndoableEdit = null;
+	}
 
-  @Override
-  public synchronized void undo() throws CannotUndoException {
-    lastUndoableEdit = super.editToBeUndone();
-    super.undo();
-  }
+	@Override
+	public synchronized void undo() throws CannotUndoException {
+		lastUndoableEdit = super.editToBeUndone();
+		super.undo();
+	}
 
-  @Override
-  public synchronized void redo() throws CannotRedoException {
-    lastUndoableEdit = super.editToBeRedone();
-    super.redo();
-  }
+	@Override
+	public synchronized void redo() throws CannotRedoException {
+		lastUndoableEdit = super.editToBeRedone();
+		super.redo();
+	}
 
-  public UndoableEdit getLastUndoableEdit() {
-    return lastUndoableEdit;
-  }
+	public UndoableEdit getLastUndoableEdit() {
+		return lastUndoableEdit;
+	}
 }

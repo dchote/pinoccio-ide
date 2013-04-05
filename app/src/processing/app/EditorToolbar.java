@@ -8,26 +8,26 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 public class EditorToolbar extends JToolBar implements ActionListener {
-	static final int TOOLBAR_HEIGHT  = 40;
+	static final int TOOLBAR_HEIGHT	 = 40;
 	
 	static final int BUTTON_COUNT = 6;
 	
-	static final int BUTTON_WIDTH  = 27;
+	static final int BUTTON_WIDTH	 = 27;
 	/** Height of each toolbar button. */
 	static final int BUTTON_HEIGHT = 32;
 	/** The amount of space between groups of buttons on the toolbar. */
-	static final int BUTTON_GAP    = 8;
+	static final int BUTTON_GAP		 = 8;
 	/** Size of the button image being chopped up. */
 	static final int BUTTON_IMAGE_SIZE = 33;
 	
-	static final int VERIFY   = 0;
-	static final int UPLOAD   = 1;
+	static final int VERIFY		= 0;
+	static final int UPLOAD		= 1;
 
-	static final int NEW      = 2;
-	static final int OPEN     = 3;
-	static final int SAVE     = 4;
+	static final int NEW			= 2;
+	static final int OPEN			= 3;
+	static final int SAVE			= 4;
 
-	static final int SERIAL   = 5;
+	static final int SERIAL		= 5;
 
 	Editor editor;
 	JPopupMenu popup;
@@ -39,7 +39,7 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 
 	public EditorToolbar(Editor editor, JMenu menu) {
 		this.editor = editor;
-	    this.menu = menu;
+		this.menu = menu;
 	
 	
 		//setLayout(new BorderLayout());
@@ -94,11 +94,11 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 		//button.setVerticalTextPosition(SwingConstants.BOTTOM);
 		//button.setHorizontalTextPosition(SwingConstants.CENTER);
 		//button.setText(buttonText);
-	    button.setToolTipText(toolTipText);
+		button.setToolTipText(toolTipText);
 		button.setActionCommand(actionCommand);
 		button.addActionListener(this);
 
-	    return button;
+		return button;
 	}
 
 	public void actionPerformed(ActionEvent actionEvent) {
@@ -122,7 +122,7 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 			final int y = buttons[OPEN].getY() + (TOOLBAR_HEIGHT - 4);
 			
 			popup = menu.getPopupMenu();
-		    popup.show(EditorToolbar.this, x, y);
+			popup.show(EditorToolbar.this, x, y);
 		} else if (actionCommand == "SAVE") {
 			editor.handleSave(false);
 		} else if (actionCommand == "SERIAL") {
