@@ -97,8 +97,10 @@ public class Editor extends JFrame implements RunnerListener {
 	// are the same for all windows (since the board and serial port that are
 	// actually used are determined by the preferences, which are shared)
 	static List<JMenu> boardsMenus;
+	static JMenu halBoardsMenu;
 	static JMenu serialMenu;
-
+	
+  
 	static SerialMenuListener serialMenuListener;
 	static SerialMonitor serialMonitor;
 	
@@ -679,6 +681,10 @@ public class Editor extends JFrame implements RunnerListener {
 				}
 			});
 		menu.add(item);
+				
+		// Ardupilot Menu
+		menu.addSeparator();
+		menu.add(buildArduPilotMenu());
 		
 		addTools(menu, Base.getToolsFolder());
 		File sketchbookTools = new File(Base.getSketchbookFolder(), "tools");
@@ -1018,6 +1024,18 @@ public class Editor extends JFrame implements RunnerListener {
 
 		//serialMenu.addSeparator();
 		//serialMenu.add(item);
+	}
+	
+	protected JMenu buildArduPilotMenu() {
+		// To deal with a Mac OS X 10.5 bug, add an extra space after the name
+		// so that the OS doesn't try to insert its slow help menu.
+		JMenu menu = new JMenu(_("ArduPilot HAL"));
+
+		if (halBoardsMenu == null) {
+			base.rebuildHalBoardsMenu(menu, this);
+		}
+		
+		return menu;
 	}
 
 
@@ -2000,12 +2018,8 @@ public class Editor extends JFrame implements RunnerListener {
 	}
 
 	// to allow update of ALL editor windows
-	synchronized public void handleWorkspaceChange(String workspace) {
-		Base.changeWorkspace(workspace);
-		setEditorTitle();
-		toolbar.workspaceSelect(Base.currentWorkspace);
-		
-		base.rebuildSketchbookMenus();
+	public void handleWorkspaceChange(String workspace) {
+		base.changeWorkspace(workspace, this);
 	}
 
 	/**
@@ -2705,7 +2719,11 @@ public class Editor extends JFrame implements RunnerListener {
 		lineStatus.repaint();
 	}
 
-
+	protected void onWorkspaceChange() {
+		setEditorTitle();
+		toolbar.workspaceSelect(base.currentWorkspace);
+		base.rebuildSketchbookMenus();
+	}
 	
 	/**
 	 * Returns the edit popup menu.

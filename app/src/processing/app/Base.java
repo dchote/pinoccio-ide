@@ -44,7 +44,7 @@ import processing.app.tools.MapWithSubkeys;
 import processing.app.tools.ZipDeflater;
 import processing.core.*;
 import static processing.app.I18n._;
-
+import processing.app.ardupilot.*;
 
 /**
  * The base class for the main processing application.
@@ -107,6 +107,8 @@ public class Base {
 	static public String librariesClassPath;
 
 	static public Map<String, TargetPackage> packages;
+
+ 	static public APConfig ardupilotConfig;
 
 	// Location for untitled items
 	static File untitledFolder;
@@ -273,6 +275,8 @@ public class Base {
 		loadHardware(getSketchbookHardwareFolder());
 		// Setup board-dependent variables.
 		onBoardOrPortChange();
+		
+		ardupilotConfig = new APConfig();
 
 		boolean opened = false;
 		boolean doUpload = false;
@@ -1222,7 +1226,9 @@ public class Base {
 
 	public void rebuildBoardsMenu(JMenu toolsMenu, final Editor editor) {
 		JMenu boardsMenu = makeOrGetBoardMenu(toolsMenu, _("Board"));
-
+		
+		boardsMenu.removeAll();
+		
 		String selPackage = Preferences.get("target_package");
 		String selPlatform = Preferences.get("target_platform");
 		String selBoard = Preferences.get("board");
@@ -1451,6 +1457,44 @@ public class Base {
 			}
 		}
 	}
+
+	public void rebuildHalBoardsMenu(JMenu menu, final Editor editor) {
+		menu.removeAll();			 
+		ButtonGroup group = new ButtonGroup();
+		for (String halName : ardupilotConfig.halBoardsTable.keySet()) {
+			APHal hal = ardupilotConfig.halBoardsTable.get(halName);
+			AbstractAction action =
+				new AbstractAction( hal.description ) {
+					public void actionPerformed(ActionEvent actionevent) {
+						selectHal((String) getValue("halName"), editor);
+					}
+				};
+			/* lambda the ultimate ah fuck it, put a coin in the jar */
+			action.putValue("halName", halName);
+			JMenuItem item = new JRadioButtonMenuItem(action);
+			if (Preferences.get("ardupilot.hal") == null) {
+					Preferences.set("ardupilot.hal", "none");
+			}
+			if (Preferences.get("ardupilot.hal").equals(halName)) {
+				item.setSelected(true);
+			}
+			group.add(item);
+			menu.add(item);
+		}
+	}
+
+	private void selectHal(String selectHal, Editor editor) {
+		ardupilotConfig.setBoard(selectHal);
+		
+		onBoardOrPortChange();
+		Sketch.buildSettingChanged();
+		
+		rebuildBoardsMenu(editor.toolsMenu, editor);
+		
+		rebuildImportMenu(Editor.importMenu, editor);
+		rebuildExamplesMenu(Editor.examplesMenu);
+	}
+
 
 	/**
 	 * Scan a folder recursively, and add any sketches found to the menu
@@ -2832,9 +2876,17 @@ public class Base {
 		}
 	}
 	
-	public static void changeWorkspace(String workspace) {
+	public void changeWorkspace(String workspace, Editor editor) {
 		currentWorkspace = workspace;
 		Preferences.set("workspace", currentWorkspace);
 		initSketchbook();
+		
+		onBoardOrPortChange();
+		Sketch.buildSettingChanged();
+		rebuildImportMenu(Editor.importMenu, editor);
+		rebuildExamplesMenu(Editor.examplesMenu);
+		
+		for (Editor otherEditor : editors)
+			otherEditor.onWorkspaceChange();
 	}
 }
