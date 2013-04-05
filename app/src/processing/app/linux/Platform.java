@@ -55,7 +55,7 @@ public class Platform extends processing.app.Platform {
 
   public File getDefaultSketchbookFolder() throws Exception {
     File home = new File(System.getProperty("user.home"));
-    return new File(home, "Arduino");
+    return new File(home, Base.currentWorkspace);
   }
 
 

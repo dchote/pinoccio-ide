@@ -33,7 +33,9 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 	JPopupMenu popup;
 	JMenu menu;
 	
+	static JComboBox workspaceCombo;
 	static JButton[] buttons; 
+	
 
 	public EditorToolbar(Editor editor, JMenu menu) {
 		this.editor = editor;
@@ -44,16 +46,26 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 		// Needed for unified toolbar look
 		putClientProperty("Quaqua.ToolBar.style", "title");
 		setFloatable(false);
-
+		
+		addWorkspaces();
 		addButtons();
 	}
 
+	private void addWorkspaces() {
+		workspaceCombo = new JComboBox(Base.workspaces);
+		workspaceCombo.setSelectedItem(Base.currentWorkspace);
+		workspaceCombo.setActionCommand("WORKSPACE");
+		workspaceCombo.addActionListener(this);
+		this.add(workspaceCombo, BorderLayout.WEST);
+	}
 
 	private void addButtons() {
+		this.addSeparator();
+		
 		buttons = new JButton[BUTTON_COUNT];
 		
 		buttons[VERIFY] = makeToolbarButton("VERIFY", "Verify", "icons/Gear.png", "Verify Sketch");
-		this.add(buttons[VERIFY], BorderLayout.WEST);
+		this.add(buttons[VERIFY]);
 		
 		buttons[UPLOAD] = makeToolbarButton("UPLOAD", "Upload", "icons/Box » This Side Up.png", "Upload Sketch");
 		this.add(buttons[UPLOAD]);
@@ -93,7 +105,9 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 		String actionCommand = actionEvent.getActionCommand();
 		boolean shiftPressed = (actionEvent.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK;
 		
-		if (actionCommand == "VERIFY") {
+		if (actionCommand == "WORKSPACE") {
+			Base.changeWorkspace((String)workspaceCombo.getSelectedItem());
+		} else if (actionCommand == "VERIFY") {
 			editor.handleRun(false);
 		} else if (actionCommand == "UPLOAD") {
 			editor.handleExport(shiftPressed);

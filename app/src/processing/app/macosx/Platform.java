@@ -90,7 +90,7 @@ public class Platform extends processing.app.Platform {
 
 
   public File getDefaultSketchbookFolder() throws Exception {
-    return new File(getDocumentsFolder(), "Pinoccio");
+    return new File(getDocumentsFolder(), Base.currentWorkspace);
     /*
     // looking for /Users/blah/Documents/Processing
     try {
