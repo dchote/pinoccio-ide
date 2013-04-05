@@ -405,7 +405,7 @@ public class Base {
 
 		// If no path is set, get the default sketchbook folder for this platform
 		if (sketchbookPath == null) {
-			File defaultFolder = getDefaultSketchbookFolder();
+			File defaultFolder = getDefaultSketchbookFolder(currentWorkspace);
 			if (portableFolder != null)
 				Preferences.set("sketchbook.path." + currentWorkspace, portableSketchbookFolder);
 			else
@@ -2001,13 +2001,13 @@ public class Base {
 	}
 
 
-	protected static File getDefaultSketchbookFolder() {
+	protected static File getDefaultSketchbookFolder(String workspace) {
 		if (portableFolder != null)
 			return new File(portableFolder, portableSketchbookFolder);
 
 		File sketchbookFolder = null;
 		try {
-			sketchbookFolder = platform.getDefaultSketchbookFolder();
+			sketchbookFolder = platform.getDefaultSketchbookFolder(workspace);
 		} catch (Exception e) { }
 
 		if (sketchbookFolder == null) {

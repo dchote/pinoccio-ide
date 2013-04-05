@@ -195,7 +195,7 @@ public class Platform extends processing.app.Platform {
 
   // looking for Documents and Settings/blah/My Documents/Processing
   // (though using a reg key since it's different on other platforms)
-  public File getDefaultSketchbookFolder() throws Exception {
+  public File getDefaultSketchbookFolder(String workspace) throws Exception {
 
     // http://support.microsoft.com/?kbid=221837&sd=RMVP
     // http://support.microsoft.com/kb/242557/en-us
@@ -217,7 +217,7 @@ public class Platform extends processing.app.Platform {
     String personalPath =
       Registry.getStringValue(REGISTRY_ROOT_KEY.CURRENT_USER, keyPath, "Personal");
 
-    return new File(personalPath, Base.currentWorkspace);
+    return new File(personalPath, workspace);
   }
 
 

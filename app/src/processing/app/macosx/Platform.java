@@ -89,8 +89,8 @@ public class Platform extends processing.app.Platform {
   }
 
 
-  public File getDefaultSketchbookFolder() throws Exception {
-    return new File(getDocumentsFolder(), Base.currentWorkspace);
+  public File getDefaultSketchbookFolder(String workspace) throws Exception {
+    return new File(getDocumentsFolder(), workspace);
     /*
     // looking for /Users/blah/Documents/Processing
     try {

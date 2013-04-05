@@ -100,7 +100,7 @@ public class Platform {
    * @return null if not overridden, which will cause a prompt to show instead. 
    * @throws Exception
    */
-  public File getDefaultSketchbookFolder() throws Exception {
+  public File getDefaultSketchbookFolder(String workspace) throws Exception {
     return null;
   }
   
