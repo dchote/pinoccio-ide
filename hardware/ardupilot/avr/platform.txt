@@ -1,4 +1,4 @@
-name=Ardupilot Boards
+name=ArduPilot Boards
 # Default "compiler.path" is correct, change only if you want to overidde the initial value
 #compiler.path={ide.path}/tools/avr/bin/..
 compiler.c.cmd=avr-gcc
