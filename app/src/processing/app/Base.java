@@ -1429,6 +1429,10 @@ public class Base {
 		Sketch.buildSettingChanged();
 		rebuildImportMenu(Editor.importMenu, editor);
 		rebuildExamplesMenu(Editor.examplesMenu);
+		
+		if (Editor.halBoardsMenu != null) {
+			rebuildHalBoardsMenu(Editor.halBoardsMenu, editor);	
+		}
 	}
 
 
@@ -1459,7 +1463,11 @@ public class Base {
 	}
 
 	public void rebuildHalBoardsMenu(JMenu menu, final Editor editor) {
-		menu.removeAll();			 
+		menu.removeAll();
+		menu.setEnabled(false);
+		
+		String currentBoard = Preferences.get("board");
+		
 		ButtonGroup group = new ButtonGroup();
 		for (String halName : ardupilotConfig.halBoardsTable.keySet()) {
 			APHal hal = ardupilotConfig.halBoardsTable.get(halName);
@@ -1480,6 +1488,10 @@ public class Base {
 			}
 			group.add(item);
 			menu.add(item);
+
+			if (currentBoard.equals(hal.boardName)) {
+				menu.setEnabled(true);
+			}
 		}
 	}
 

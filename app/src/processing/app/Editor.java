@@ -1029,13 +1029,11 @@ public class Editor extends JFrame implements RunnerListener {
 	protected JMenu buildArduPilotMenu() {
 		// To deal with a Mac OS X 10.5 bug, add an extra space after the name
 		// so that the OS doesn't try to insert its slow help menu.
-		JMenu menu = new JMenu(_("ArduPilot HAL"));
-
-		if (halBoardsMenu == null) {
-			base.rebuildHalBoardsMenu(menu, this);
-		}
+		halBoardsMenu = new JMenu(_("ArduPilot HAL"));
 		
-		return menu;
+		base.rebuildHalBoardsMenu(halBoardsMenu, this);
+
+		return halBoardsMenu;
 	}
 
 
