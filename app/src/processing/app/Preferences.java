@@ -321,7 +321,7 @@ public class Preferences {
 		//dialog = new JDialog(editor, "Preferences", true);
 		dialog = new JFrame(_("Preferences"));
 		dialog.setResizable(false);
-
+		
 		Container pain = dialog.getContentPane();
 		pain.setLayout(null);
 
@@ -353,8 +353,7 @@ public class Preferences {
 		button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					File dflt = new File(sketchbookLocationField.getText());
-					File file =
-									Base.selectFolder(_("Select new sketchbook location"), dflt, dialog);
+					File file = Base.selectFolder(_("Select new " + Base.currentWorkspace + " sketchbook location"), dflt, dialog);
 					if (file != null) {
 						String path = file.getAbsolutePath();
 						if (Base.getPortableFolder() != null) {
@@ -630,17 +629,17 @@ public class Preferences {
 		//setBoolean("sketchbook.auto_clean", sketchCleanBox.isSelected());
 
 		// if the sketchbook path has changed, rebuild the menus
-		String oldPath = get("sketchbook.path");
+		String oldPath = get("sketchbook.path." + Base.currentWorkspace);
 		String newPath = sketchbookLocationField.getText();
 		if (newPath.isEmpty()) {
 			if (Base.getPortableFolder() == null)
-				newPath = editor.base.getDefaultSketchbookFolder().toString();
+				newPath = editor.base.getDefaultSketchbookFolder(Base.currentWorkspace).toString();
 			else
 				newPath = Base.getPortableSketchbookFolder();
 		}
 		if (!newPath.equals(oldPath)) {
 			editor.base.rebuildSketchbookMenus();
-			set("sketchbook.path", newPath);
+			set("sketchbook.path." + Base.currentWorkspace, newPath);
 		}
 
 		setBoolean("editor.external", externalEditorBox.isSelected());
@@ -701,7 +700,7 @@ public class Preferences {
 		//	setSelected(getBoolean("sketchbook.auto_clean"));
 
 		sketchbookLocationField.
-			setText(get("sketchbook.path"));
+			setText(get("sketchbook.path." + Base.currentWorkspace));
 		externalEditorBox.
 			setSelected(getBoolean("editor.external"));
 		checkUpdatesBox.

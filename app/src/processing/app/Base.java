@@ -55,7 +55,7 @@ import static processing.app.I18n._;
 public class Base {
 	public static final int REVISION = 1;
 	/** This might be replaced by main() if there's a lib/version.txt file. */
-	static String VERSION_NAME = "0001";
+	static String VERSION_NAME = "0002";
 	/** Set true if this a proper release rather than a numbered revision. */
 	static public boolean RELEASE = false;
 
@@ -755,11 +755,9 @@ public class Base {
 	public void handleOpenPrompt() {
 		// get the frontmost window frame for placing file dialog
 		FileDialog fd = new FileDialog(activeEditor,
-																	 _("Open an Pinoccio sketch..."),
+																	 _("Open an " + currentWorkspace + " sketch..."),
 																	 FileDialog.LOAD);
-		// This was annoying people, so disabled it in 0125.
-		//fd.setDirectory(Preferences.get("sketchbook.path"));
-		//fd.setDirectory(getSketchbookPath());
+		fd.setDirectory(Preferences.get("sketchbook.path." + currentWorkspace));
 
 		// Only show .pde files as eligible bachelors
 		fd.setFilenameFilter(new FilenameFilter() {
@@ -1969,8 +1967,8 @@ public class Base {
 
 	static public File getSketchbookFolder() {
 		if (portableFolder != null)
-			return new File(portableFolder, Preferences.get("sketchbook.path"));
-		return new File(Preferences.get("sketchbook.path"));
+			return new File(portableFolder, Preferences.get("sketchbook.path." + currentWorkspace));
+		return new File(Preferences.get("sketchbook.path." + currentWorkspace));
 	}
 
 

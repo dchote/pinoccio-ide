@@ -53,10 +53,13 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 
 	private void addWorkspaces() {
 		workspaceCombo = new JComboBox(Base.workspaces);
-		workspaceCombo.setSelectedItem(Base.currentWorkspace);
+		
+		workspaceSelect(Base.currentWorkspace);
+		
 		workspaceCombo.setActionCommand("WORKSPACE");
 		workspaceCombo.addActionListener(this);
 		this.add(workspaceCombo, BorderLayout.WEST);
+		
 	}
 
 	private void addButtons() {
@@ -106,7 +109,7 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 		boolean shiftPressed = (actionEvent.getModifiers() & ActionEvent.SHIFT_MASK) == ActionEvent.SHIFT_MASK;
 		
 		if (actionCommand == "WORKSPACE") {
-			Base.changeWorkspace((String)workspaceCombo.getSelectedItem());
+			editor.handleWorkspaceChange((String)workspaceCombo.getSelectedItem());
 		} else if (actionCommand == "VERIFY") {
 			editor.handleRun(false);
 		} else if (actionCommand == "UPLOAD") {
@@ -136,6 +139,10 @@ public class EditorToolbar extends JToolBar implements ActionListener {
 	
 	public void deactivate(int buttonIndex) {
 		buttons[buttonIndex].setEnabled(true);
+	}
+	
+	synchronized public void workspaceSelect(String workspace) {
+		workspaceCombo.setSelectedItem(workspace);
 	}
 	
 	public Dimension getPreferredSize() {

@@ -218,7 +218,7 @@ public class Editor extends JFrame implements RunnerListener {
 		pain.setLayout(new BorderLayout());
 		contentPain.add(pain, BorderLayout.CENTER);
 	
-	pain.getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+		pain.getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
 	
 		Box box = Box.createVerticalBox();
 		Box upper = Box.createVerticalBox();
@@ -1999,6 +1999,14 @@ public class Editor extends JFrame implements RunnerListener {
 		toFront();
 	}
 
+	// to allow update of ALL editor windows
+	synchronized public void handleWorkspaceChange(String workspace) {
+		Base.changeWorkspace(workspace);
+		setEditorTitle();
+		toolbar.workspaceSelect(Base.currentWorkspace);
+		
+		base.rebuildSketchbookMenus();
+	}
 
 	/**
 	 * Deactivate the Run button. This is called by Runner to notify that the
@@ -2227,11 +2235,9 @@ public class Editor extends JFrame implements RunnerListener {
 		}
 		header.rebuild();
 		// Set the title of the window to "sketch_070752a - Processing 0126"
-		setTitle(
-			I18n.format(
-	_("{0} | Pinoccio"),
-	sketch.getName())
-		);
+		
+		setEditorTitle();
+		
 		// Disable untitled setting from previous document, if any
 		untitled = false;
 
@@ -2249,7 +2255,11 @@ public class Editor extends JFrame implements RunnerListener {
 //			return false;
 //		}
 	}
-
+	protected void setEditorTitle() {
+		setTitle(
+			I18n.format(_("{0} | Pinoccio (" + Base.currentWorkspace + " workspace)"), sketch.getName())
+		);
+	}
 
 	/**
 	 * Actually handle the save command. If 'immediately' is set to false,
@@ -2694,6 +2704,7 @@ public class Editor extends JFrame implements RunnerListener {
 		lineStatus.setSerialPort(Preferences.get("serial.port"));
 		lineStatus.repaint();
 	}
+
 
 	
 	/**
