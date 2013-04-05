@@ -1464,9 +1464,10 @@ public class Base {
 
 	public void rebuildHalBoardsMenu(JMenu menu, final Editor editor) {
 		menu.removeAll();
-		menu.setEnabled(false);
 		
 		String currentBoard = Preferences.get("board");
+		boolean halUsable = false;
+		
 		
 		ButtonGroup group = new ButtonGroup();
 		for (String halName : ardupilotConfig.halBoardsTable.keySet()) {
@@ -1490,9 +1491,16 @@ public class Base {
 			menu.add(item);
 
 			if (currentBoard.equals(hal.boardName)) {
-				menu.setEnabled(true);
+				halUsable = true;
 			}
 		}
+		
+		// hax to ensure hal gets disabled on incompatible board change
+		if (!halUsable) {
+			ardupilotConfig.setBoard("none");
+		}
+		
+		menu.setEnabled(halUsable);
 	}
 
 	private void selectHal(String selectHal, Editor editor) {
