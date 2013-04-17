@@ -45,8 +45,7 @@ static NwkRouteTableRecord_t nwkRouteTable[NWK_ROUTE_TABLE_SIZE];
 *****************************************************************************/
 void nwkRouteInit(void)
 {
-  uint8_t i;
-  for (i= 0; i < NWK_ROUTE_TABLE_SIZE; i++)
+  for (uint8_t i = 0; i < NWK_ROUTE_TABLE_SIZE; i++)
     nwkRouteTable[i].dst = NWK_ROUTE_UNKNOWN;
 }
 
@@ -54,8 +53,7 @@ void nwkRouteInit(void)
 *****************************************************************************/
 static NwkRouteTableRecord_t *nwkRouteFindRecord(uint16_t dst)
 {
-  uint8_t i;
-  for (i = 0; i < NWK_ROUTE_TABLE_SIZE; i++)
+  for (uint8_t i = 0; i < NWK_ROUTE_TABLE_SIZE; i++)
     if (nwkRouteTable[i].dst == dst)
       return &nwkRouteTable[i];
 
@@ -87,7 +85,7 @@ void nwkRouteFrameReceived(NwkFrame_t *frame)
       (header->macSrcAddr != header->nwkSrcAddr))
     return;
 
-  if (0xffff == header->macDstPanId)
+  if (NWK_BROADCAST_PANID == header->macDstPanId)
     return;
 
   rec = nwkRouteFindRecord(header->nwkSrcAddr);
@@ -150,11 +148,10 @@ void nwkRouteFrameSent(NwkFrame_t *frame)
 *****************************************************************************/
 uint16_t nwkRouteNextHop(uint16_t dst)
 {
-  if (0xffff == dst)
+  if (NWK_BROADCAST_ADDR == dst)
     return NWK_ROUTE_UNKNOWN;
 
-  uint8_t i;
-  for (i = 0; i < NWK_ROUTE_TABLE_SIZE; i++)
+  for (uint8_t i = 0; i < NWK_ROUTE_TABLE_SIZE; i++)
     if (nwkRouteTable[i].dst == dst)
       return nwkRouteTable[i].nextHop;
 

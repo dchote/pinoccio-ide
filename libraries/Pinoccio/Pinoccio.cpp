@@ -1,47 +1,16 @@
 #include <Arduino.h>
 #include <Pinoccio.h>
-
 #include "atmega128rfa1.h"
-#include "utility/phy.h"
-#include "utility/hal.h"
-#include "utility/sys.h"
-#include "utility/nwk.h"
-#include "utility/sysTimer.h"
-#include "utility/halSleep.h"
-#include "utility/halTemperature.h"
-#include "utility/halRgbLed.h"
-#include "utility/webGainspan.h"
-#include "utility/webWifi.h"
-#include "utility/webWifiServer.h"
-#include "utility/webWifiClient.h"
-#include "utility/mqttClient.h"
 
 PinoccioClass Pinoccio;
-PinoccioConfig config;
-
-// get us back our clean stream output: http://playground.arduino.cc/Main/StreamingOutput
-template<class T> inline Print &operator <<(Print &obj, T arg) { obj.print(arg); return obj; }
 
 PinoccioClass::PinoccioClass() {
   RgbLed.turnOff();
-
   pinMode(CHG_STATUS, INPUT);
-  digitalWrite(CHG_STATUS, HIGH); // enable internal pull-up
-
-  pinMode(BATT_CHECK, OUTPUT);
   digitalWrite(BATT_CHECK, LOW);
-
-  pinMode(VCC_ENABLE, OUTPUT);
+  pinMode(BATT_CHECK, OUTPUT);
   digitalWrite(VCC_ENABLE, HIGH);
-  
-  config.channel               = 0;
-  config.address               = 1;
-  config.channel               = 0x1a;  // channel 26, at the end of the 2.4GHz spectrum
-  config.panID                 = 0x4567;
-  config.securityKey           = "TestSecurityKey0";
-  config.enableRouting         = false;
-  config.enableSecurity        = false;
-  config.enableEnergyDetection = false;
+  pinMode(VCC_ENABLE, OUTPUT); 
 }
 
 PinoccioClass::~PinoccioClass() { }
@@ -52,22 +21,9 @@ void PinoccioClass::alive() {
 
 void PinoccioClass::init() {
   Serial.begin(115200);
-
   SYS_Init();
   // TODO PHY_TX_PWR_REG(TX_PWR_3_2DBM);
   HAL_MeasureAdcOffset();
-  
-  if (config.enableSecurity == true) {
-    Serial.println("Enabling security");
-    NWK_SetSecurityKey((uint8_t *)config.securityKey);
-  }
-}
-
-void PinoccioClass::initMesh(uint16_t address, uint16_t panID, uint16_t channel) {
-  NWK_SetAddr(address);
-  NWK_SetPanId(panID);
-  PHY_SetChannel(channel);
-  PHY_SetRxState(true);
 }
 
 void PinoccioClass::loop() {
@@ -78,8 +34,37 @@ float PinoccioClass::getTemperature() {
   return HAL_MeasureTemperature();
 }
 
+bool PinoccioClass::isBatteryPresent() {
+  return (triStateBatteryCheck() == 1);
+}
+
 bool PinoccioClass::isBatteryCharging() {
+  //return (triStateBatteryCheck() == 0);
   return (digitalRead(CHG_STATUS) == LOW);
+}
+
+uint8_t PinoccioClass::triStateBatteryCheck() {
+  // TODO, get this working:  http://forums.parallax.com/showthread.php/141525-Tri-State-Logic-and-a-propeller-input?p=1113946&viewfull=1#post1113946
+  // returns 0 for charging, 1 for no battery, and 3 for charged
+  uint8_t state = 0;
+
+  // The DDxn bit in the DDRx Register selects the direction of this pin. 1==output, 0==input
+  DDRD = (1<<DDB7);
+
+  // If PORTxn is written logic one when the pin is configured as an input pin, the pull-up resistor is activated.
+  // To switch the pull-up resistor off, PORTxn has to be written logic zero or the pin has to be configured as an output pin.
+  // If PORTxn is written logic one when the pin is configured as an output pin, output is HIGH, else LOW
+  PORTD = (0<<PD7);
+  DDRD = (0<<DDB7);
+  PORTD = (1<<PD7);
+  asm volatile("nop");
+  state = PIND;
+  DDRD = (1<<DDB7);
+  DDRD = (0<<DDB7);
+  state <<= 1;
+  state |= PIND;
+  
+  return state;
 }
 
 float PinoccioClass::getBatteryVoltage() {
@@ -100,16 +85,19 @@ void PinoccioClass::disableShieldVcc() {
   digitalWrite(VCC_ENABLE, LOW);
 }
 
-uint16_t PinoccioClass::getRandomNumber() {
-  uint16_t prevRand = randomNumber;
-  PHY_RandomReq();
-  while (randomNumber == prevRand) {}
-  return randomNumber;
-}
-
 void PinoccioClass::setRandomNumber(uint16_t number) {
   randomNumber = number;
 }
+
+// TODO
+/*
+void PinoccioClass::initMesh() {
+  NWK_SetAddr(APP_MESH_ADDR);
+  NWK_SetPanId(APP_MESH_PANID);
+  PHY_SetChannel(APP_MESH_CHANNEL);
+  PHY_SetRxState(true);
+}
+*/
 
 bool PinoccioClass::publish(char* topic, char* payload, int size) {
 
@@ -119,14 +107,27 @@ bool PinoccioClass::subscribe(char* topic, bool (*handler)(NWK_DataInd_t *msg)) 
 
 }
 
-bool PinoccioClass::sendMessage(NWK_DataReq_t *msg) {
+bool sendMessage(NWK_DataReq_t *msg) {
   NWK_DataReq(msg);
 }
 
-bool PinoccioClass::listenForMessage(uint8_t id, bool (*handler)(NWK_DataInd_t *msg)) {
+bool listenForMessage(uint8_t id, bool (*handler)(NWK_DataInd_t *msg)) {
   NWK_OpenEndpoint(id, handler);
 }
 
-void PHY_RandomConf(uint16_t rnd) {
+// TODO
+/*
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+#ifdef PHY_ENABLE_RANDOM_NUMBER_GENERATOR
+PHY_RandomConf(rnd) {
   Pinoccio.setRandomNumber(rnd);
 }
+#endif
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+*/

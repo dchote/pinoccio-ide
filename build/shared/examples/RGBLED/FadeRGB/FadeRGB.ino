@@ -1,12 +1,8 @@
 #include <Pinoccio.h>
 
-void setup() { 
-  Pinoccio.init();
-}
+void setup() { }
 
 void loop() {
-  Pinoccio.loop();
-  
   int red, green, blue;
   long time = 0;
 

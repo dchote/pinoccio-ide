@@ -13,7 +13,7 @@
 /*****************************************************************************
 *****************************************************************************/
 #ifndef HAL_TEMPERATURE_CALIBRATION_OFFSET
-#define HAL_TEMPERATURE_CALIBRATION_OFFSET -4 // degrees C
+#define HAL_TEMPERATURE_CALIBRATION_OFFSET 0.55 // degrees C
 #endif
 
 #define HAL_TEMPERATURE_READING_DELAY      500 // µs

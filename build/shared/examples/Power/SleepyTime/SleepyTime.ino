@@ -23,6 +23,7 @@ void PHY_EdConf(int8_t ed) {
 
 void setup() {
   Pinoccio.init();
+  Serial.begin(115200);
 
   appSleepTimer.interval = APP_SLEEP_INTERVAL;
   appSleepTimer.mode = SYS_TIMER_INTERVAL_MODE;
@@ -32,7 +33,7 @@ void setup() {
 }
 
 void loop() {
-  Pinoccio.loop();
+  Pinoccio.taskHandler();
 
   switch (appState) {
     case APP_STATE_START_SEND:

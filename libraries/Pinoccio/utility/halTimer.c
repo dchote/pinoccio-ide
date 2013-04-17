@@ -25,9 +25,9 @@ void HAL_TimerInit(void)
 {
   halTimerIrqCount = 0;
   OCR4A = ((F_CPU / 1000ul) / TIMER_PRESCALER) * HAL_TIMER_INTERVAL;
-  TCCR4B = (1 << WGM12);    // CTC mode
-  TCCR4B |= (1 << CS11);    // Prescaler 8
-  TIMSK4 |= (1 << OCIE4A);  // Enable TC4 interrupt
+  TCCR4B = (1 << WGM12);              // CTC mode
+  TCCR4B |= (1 << CS11);              // Prescaler 8
+  TIMSK4 |= (1 << OCIE4A);            // Enable TC4 interrupt
 }
 
 /*****************************************************************************

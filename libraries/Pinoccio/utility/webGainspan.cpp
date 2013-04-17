@@ -393,6 +393,7 @@ void webGainspan::configure(GS_PROFILE *prof)
 
 uint8_t webGainspan::connect()
 {
+
   if (!send_cmd_w_resp(CMD_DISCONNECT)) {
     return 0;
   }

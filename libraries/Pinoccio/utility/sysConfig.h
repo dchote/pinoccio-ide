@@ -18,23 +18,23 @@ extern "C"{
 /*****************************************************************************
 *****************************************************************************/
 #ifndef NWK_BUFFERS_AMOUNT
-#define NWK_BUFFERS_AMOUNT                       3
+#define NWK_BUFFERS_AMOUNT                       1
 #endif
 
 #ifndef NWK_MAX_ENDPOINTS_AMOUNT
-#define NWK_MAX_ENDPOINTS_AMOUNT                 3
+#define NWK_MAX_ENDPOINTS_AMOUNT                 1
 #endif
 
 #ifndef NWK_DUPLICATE_REJECTION_TABLE_SIZE
-#define NWK_DUPLICATE_REJECTION_TABLE_SIZE       10
+#define NWK_DUPLICATE_REJECTION_TABLE_SIZE       1
 #endif
 
 #ifndef NWK_DUPLICATE_REJECTION_TTL
-#define NWK_DUPLICATE_REJECTION_TTL              3000 // ms
+#define NWK_DUPLICATE_REJECTION_TTL              1000 // ms
 #endif
 
 #ifndef NWK_ROUTE_TABLE_SIZE
-#define NWK_ROUTE_TABLE_SIZE                     100
+#define NWK_ROUTE_TABLE_SIZE                     0
 #endif
 
 #ifndef NWK_ROUTE_DEFAULT_SCORE
@@ -45,12 +45,17 @@ extern "C"{
 #define NWK_ACK_WAIT_TIME                        1000 // ms
 #endif
 
-#define NWK_ENABLE_ROUTING
-#define NWK_ENABLE_SECURITY
-#define PHY_ENABLE_RANDOM_NUMBER_GENERATOR
+//#define NWK_ENABLE_ROUTING
+//#define NWK_ENABLE_SECURITY
 
 #ifndef SYS_SECURITY_MODE
 #define SYS_SECURITY_MODE                        0
+#endif
+
+#ifdef HAL_ENABLE_UART
+#define HAL_UART_CHANNEL                    0
+#define HAL_UART_RX_FIFO_SIZE               200
+#define HAL_UART_TX_FIFO_SIZE               200
 #endif
 
 /*****************************************************************************

@@ -83,8 +83,7 @@ void SYS_EncryptConf(void)
 
   block = (nwkSecuritySize < NWK_SECURITY_BLOCK_SIZE) ? nwkSecuritySize : NWK_SECURITY_BLOCK_SIZE;
 
-  uint8_t i;
-  for (i = 0; i < block; i++)
+  for (uint8_t i = 0; i < block; i++)
   {
     text[i] ^= vector[i];
 
@@ -154,8 +153,7 @@ void nwkSecurityTaskHandler(void)
     return;
   }
 
-  int i;
-  for (i = 0; i < NWK_BUFFERS_AMOUNT; i++)
+  for (int i = 0; i < NWK_BUFFERS_AMOUNT; i++)
   {
     NwkFrame_t *frame = nwkFrameByIndex(i);
 

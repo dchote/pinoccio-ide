@@ -3,12 +3,13 @@
 
 void setup() {
   Pinoccio.init();
+  Serial.begin(115200);
 }
 
 void loop() {
-  Pinoccio.loop();
+  Pinoccio.taskHandler();
 
   Serial.print("Temp: ");
   Serial.println(Pinoccio.getTemperature());
-  delay(3000);
+  delay(1000);
 }

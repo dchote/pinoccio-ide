@@ -1,25 +1,57 @@
-/**************************************************************************\
-* Pinoccio Arduino Library                                                 *
-* https://github.com/Pinoccio/pinoccio-arduino-library                     *
-* Copyright (c) 2012, Atmel Corporation. All rights reserved.              *
-* ------------------------------------------------------------------------ *
-*  This program is free software; you can redistribute it and/or modify it *
-*  under the terms of the ASF license as described in license.txt.         *
-\**************************************************************************/
+/**
+ * \file atmega256rfr2.h
+ *
+ * \brief ATMEGA256RFR2 registers description
+ *
+ * Copyright (C) 2012 Atmel Corporation. All rights reserved.
+ *
+ * \asf_license_start
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ *    this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ *    this list of conditions and the following disclaimer in the documentation
+ *    and/or other materials provided with the distribution.
+ *
+ * 3. The name of Atmel may not be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * 4. This software may only be redistributed and used in connection with an
+ *    Atmel microcontroller product.
+ *
+ * THIS SOFTWARE IS PROVIDED BY ATMEL "AS IS" AND ANY EXPRESS OR IMPLIED
+ * WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT ARE
+ * EXPRESSLY AND SPECIFICALLY DISCLAIMED. IN NO EVENT SHALL ATMEL BE LIABLE FOR
+ * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+ * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
+ *
+ * \asf_license_stop
+ *
+ * $Id: atmega256rfr2.h 5223 2012-09-10 16:47:17Z ataradov $
+ *
+ */
 
-#ifndef _ATMEGA128RFA1_H_
-#define _ATMEGA128RFA1_H_
+#ifndef _ATMEGA256RFR2_H_
+#define _ATMEGA256RFR2_H_
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-
-#include "sysTypes.h"
+#include <sysTypes.h>
 
 /*****************************************************************************
 *****************************************************************************/
 #define AES_BLOCK_SIZE                 16
-// TODO #define PHY_ENABLE_RANDOM_NUMBER_GENERATOR
 
 /*****************************************************************************
 *****************************************************************************/
@@ -287,6 +319,18 @@ struct __struct_XOSC_CTRL_REG
   uint8_t xtalMode : 4; // Crystal Oscillator Operating Mode
 };
 
+// Channel Control Register 0
+#define CC_CTRL_0_REG   MMIO_REG(0x153, uint8_t)
+
+// Channel Control Register 1
+#define CC_CTRL_1_REG   MMIO_REG(0x154, uint8_t)
+#define CC_CTRL_1_REG_s MMIO_REG(0x154, struct __struct_CC_CTRL_1_REG)
+struct __struct_CC_CTRL_1_REG
+{
+  uint8_t ccBand : 4; // Channel Band
+  uint8_t        : 4;
+};
+
 // Transceiver Receiver Sensitivity Control Register
 #define RX_SYN_REG      MMIO_REG(0x155, uint8_t)
 #define RX_SYN_REG_s    MMIO_REG(0x155, struct __struct_RX_SYN_REG)
@@ -400,6 +444,20 @@ struct __struct_CSMA_BE_REG
   uint8_t maxBe : 4; // Maximum Back-off Exponent
 };
 
+// Reduced Power Consumption Control Register
+#define TRX_RPC_REG   MMIO_REG(0x156, uint8_t)
+#define TRX_RPC_REG_s MMIO_REG(0x156, struct __struct_TRX_RPC_REG)
+struct __struct_TRX_RPC_REG
+{
+  uint8_t xahRpcEn  : 1;
+  uint8_t ipanRpcEn : 1;
+  uint8_t           : 1;
+  uint8_t pllRpcEn  : 1;
+  uint8_t pdtRpcEn  : 1;
+  uint8_t rxRpcEn   : 1;
+  uint8_t rxRpcCtrl : 2;
+};
+
 // Transceiver Received Frame Length Register
 #define TST_RX_LENGTH_REG MMIO_REG(0x17B, uint8_t)
 
@@ -417,4 +475,4 @@ struct __struct_CSMA_BE_REG
 #ifdef __cplusplus
 } // extern "C"
 #endif
-#endif // _ATMEGA128RFA1_H_
+#endif // _ATMEGA256RFR2_H_
