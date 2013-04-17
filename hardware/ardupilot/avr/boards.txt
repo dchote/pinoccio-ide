@@ -2,7 +2,7 @@ apm1.name=ArduPilot Mega 1
 apm1.cpu=2560
 
 apm1.upload.tool=avrdude
-apm1.upload.protocol=stk500v2
+apm1.upload.protocol=wiring
 apm1.upload.maximum_size=258048
 apm1.upload.speed=115200
 
@@ -25,7 +25,7 @@ apm2.name=ArduPilot Mega 2.x
 apm2.cpu=2560
 
 apm2.upload.tool=avrdude
-apm2.upload.protocol=stk500v2
+apm2.upload.protocol=wiring
 apm2.upload.maximum_size=258048
 apm2.upload.speed=115200
 

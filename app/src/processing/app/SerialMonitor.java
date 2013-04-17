@@ -64,10 +64,10 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
 		getContentPane().setLayout(new BorderLayout());
 		
 
-	JPanel pane = new JPanel();
-	getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
+		JPanel pane = new JPanel();
+		getRootPane().putClientProperty("apple.awt.brushMetalLook", Boolean.TRUE);
 	
-	pane.setLayout(new BorderLayout());
+		pane.setLayout(new BorderLayout());
 	
 		Font consoleFont = Theme.getFont("serial.font");
 		Font editorFont = Preferences.getFont("editor.font");
@@ -164,7 +164,8 @@ public class SerialMonitor extends JFrame implements MessageConsumer {
 		pane.add(Box.createRigidArea(new Dimension(8, 0)));
 		pane.add(serialRates);
 		
-		//TODO DAN move to preferences getContentPane().add(pane, BorderLayout.NORTH);
+		//TODO DAN move to preferences 
+		getContentPane().add(pane, BorderLayout.NORTH);
 
 
 	

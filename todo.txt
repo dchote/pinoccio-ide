@@ -1,1 +1,4 @@
-TODO
+Things I anticipate doing:
+	- Re-write the preferences window, break it out of the preferences class completely. Add serial monitor preferences in here
+	- More robust error handling in the IDE. Right now if config files are incorrect or things arnt 100% right... things crash... 
+	- Wireless firmware upload (the ability to upload the hex to a pinoccio board via IP)
