@@ -107,7 +107,7 @@ public class BasicUploader extends Uploader  {
     
     prefs.put("build.path", buildPath);
     prefs.put("build.project_name", className);
-    if (verbose)
+    if (verbose || Preferences.getBoolean("upload.verbose"))
       prefs.put("upload.verbose", prefs.get("upload.params.verbose"));
     else
       prefs.put("upload.verbose", prefs.get("upload.params.quiet"));
@@ -228,7 +228,7 @@ public class BasicUploader extends Uploader  {
     prefs.put("build.path", buildPath);
     prefs.put("build.project_name", className);
 
-    if (verbose)
+    if (verbose || Preferences.getBoolean("upload.verbose"))
       prefs.put("program.verbose", prefs.get("program.params.verbose"));
     else
       prefs.put("program.verbose", prefs.get("program.params.quiet"));
@@ -261,7 +261,7 @@ public class BasicUploader extends Uploader  {
     prefs.putAll(Base.getBoardPreferences());
     prefs.putAll(targetPlatform.getProgrammer(programmer));
     prefs.putAll(targetPlatform.getTool(prefs.get("bootloader.tool")));
-    if (verbose) {
+    if (verbose || Preferences.getBoolean("upload.verbose")) {
       prefs.put("erase.verbose", prefs.get("erase.params.verbose"));
       prefs.put("bootloader.verbose", prefs.get("bootloader.params.verbose"));
     } else {
